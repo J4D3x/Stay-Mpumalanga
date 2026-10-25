@@ -30,6 +30,14 @@ type AccommodationRow = {
 export default function SearchPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [q, setQ] = useState('');
+  useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const initialQuery = params.get('q');
+
+  if (initialQuery) {
+    setQ(initialQuery);
+  }
+}, []);
   const [nsfas, setNsfas] = useState(false);
   const [max, setMax] = useState(5000);
   const [loading, setLoading] = useState(true);
