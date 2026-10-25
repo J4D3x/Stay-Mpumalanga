@@ -1,4 +1,4 @@
--- StayMpumalanga V1 schema. Run this in Supabase SQL Editor.
+-- ResLink V1 schema. Run this in Supabase SQL Editor.
 create extension if not exists pgcrypto;
 
 create table if not exists public.profiles (

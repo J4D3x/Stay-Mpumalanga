@@ -226,7 +226,8 @@ nav {
 
 .badge {
   font-size: 0.72rem;
-  background: #eef1ee;
+  background: #eef1ee00;
+  color: rgb(255, 255, 255);
   padding: 6px 9px;
   border-radius: 20px;
   font-weight: 700;
@@ -234,7 +235,7 @@ nav {
 
 .badge.green {
   background: var(--accent2);
-  color: var(--accent);
+  color: rgb(118, 118, 118);
 }
 
 .cardBottom {
