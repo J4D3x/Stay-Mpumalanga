@@ -1,0 +1,4 @@
+'use client';
+import { MapContainer,TileLayer,Marker,Popup } from 'react-leaflet'; import L from 'leaflet'; import 'leaflet/dist/leaflet.css'; import { Listing } from '@/types';
+const icon=L.icon({iconUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',shadowUrl:'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',iconSize:[25,41],iconAnchor:[12,41]});
+export default function Map({listings}:{listings:Listing[]}){return <MapContainer center={[-25.87,29.23]} zoom={12} scrollWheelZoom className="map"><TileLayer attribution='&copy; OpenStreetMap contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>{listings.map(l=><Marker key={l.id} position={[l.lat,l.lng]} icon={icon}><Popup><strong>{l.name}</strong><br/>R{l.price.toLocaleString()}/month<br/><a href={`/listing/${l.id}`}>View listing</a></Popup></Marker>)}</MapContainer>}
