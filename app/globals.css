@@ -812,3 +812,42 @@ footer strong {
     flex-wrap: wrap;
   }
 }
+
+.splashScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.splashScreen h1 {
+  margin: 0;
+  display: flex;
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.splashLetter {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: splashLetterAppear 0.4s ease forwards;
+}
+
+@keyframes splashLetterAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SplashScreen } from '@/components/SplashScreen';
 import { Search, ShieldCheck, MapPinned, FileCheck } from 'lucide-react';
 import { ListingCard } from '@/components/ListingCard';
 import { createClient } from '@/lib/supabase/server';
@@ -36,6 +37,7 @@ export default async function Home() {
 
   return (
     <>
+    <SplashScreen />
     <FloatingSearch />
     <main>
         <section className="hero">
