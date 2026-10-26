@@ -1,7 +1,9 @@
+
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MapPin, CheckCircle, ShieldCheck } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
+import { ApplicationForm } from '@/components/ApplicationForm';
 
 export default async function ListingPage({
   params,
@@ -28,10 +30,29 @@ export default async function ListingPage({
     notFound();
   }
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let role: string | null = null;
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    role = profile?.role ?? null;
+  }
+
   return (
     <main>
       <section className="detailHero">
-        <img src={l.image_url || '/placeholder-accommodation.jpg'} alt={l.name} />
+        <img
+          src={l.image_url || '/placeholder-accommodation.jpg'}
+          alt={l.name}
+        />
 
         <div>
           <div className="badges">
@@ -43,7 +64,8 @@ export default async function ListingPage({
 
           <h1>{l.name}</h1>
           <p>
-            <MapPin size={17} /> {l.location} · {l.institution || 'Not specified'}
+            <MapPin size={17} /> {l.location} ·{' '}
+            {l.institution || 'Not specified'}
           </p>
         </div>
       </section>
@@ -68,8 +90,8 @@ export default async function ListingPage({
             <div>
               <strong>Before you apply</strong>
               <p>
-                Confirm current pricing, availability, accreditation status
-                and application requirements with the provider.
+                Confirm current pricing, availability, accreditation
+                status and application requirements with the provider.
               </p>
             </div>
           </div>
@@ -81,12 +103,36 @@ export default async function ListingPage({
             R{Number(l.price).toLocaleString()}
             <small>/month</small>
           </strong>
+
           <p>{l.room_type || 'Room type not specified'}</p>
-          <Link className="button" href={`/login?next=/listing/${l.id}`}>
-            Apply / enquire
-          </Link>
+
+          {!user ? (
+            <Link
+              className="button"
+              href={`/login?next=${encodeURIComponent(
+                `/listing/${l.id}`
+              )}`}
+            >
+              Sign in to apply / enquire
+            </Link>
+          ) : role === 'student' ? (
+           <a className="button" href="#application">
+            Apply for accommodation
+            </a>
+          ) : (
+            <p>Student accounts are required to apply for accommodation.</p>
+          )}
         </aside>
       </section>
+
+      {user && role === 'student' && (
+  <section className="enquirySection">
+    <ApplicationForm
+      accommodationId={l.id}
+      accommodationName={l.name}
+    />
+  </section>
+)}
     </main>
   );
 }
