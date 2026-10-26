@@ -140,7 +140,7 @@ export default function SearchPage() {
               value={max}
               onChange={(e) => setMax(Number(e.target.value))}
             />
-            <strong>R{max.toLocaleString()}</strong>
+           <strong>R{max.toLocaleString('en-ZA')}</strong>
           </label>
 
           <label className="check">

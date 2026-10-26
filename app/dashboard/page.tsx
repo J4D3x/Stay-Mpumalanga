@@ -1,6 +1,6 @@
 
 'use client';
-
+import { SignOutButton } from '@/components/SignOutButton';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -212,6 +212,7 @@ export default function Dashboard() {
             Keep track of your accommodation applications
             and stay up to date with their progress.
           </p>
+          <SignOutButton />
         </div>
 
         <Link href="/search" className="dashboardBrowseButton">
