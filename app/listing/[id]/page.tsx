@@ -1,5 +1,6 @@
 'use'
 import Link from 'next/link';
+import { WishlistButton } from '@/components/WishlistButton';
 import { notFound } from 'next/navigation';
 import { MapPin, CheckCircle, ShieldCheck, Clock } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
@@ -93,6 +94,7 @@ export default async function ListingPage({
             <MapPin size={17} /> {l.location} ·{' '}
             {l.institution || 'Not specified'}
           </p>
+          <WishlistButton accommodationId={l.id} />
         </div>
       </section>
 

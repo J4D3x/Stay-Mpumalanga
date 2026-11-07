@@ -16,6 +16,7 @@ import {
   MapPin,
   Plus,
   RefreshCw,
+  UserRound,
   Users,
   Wallet,
 } from 'lucide-react';
@@ -140,6 +141,7 @@ export default function ProviderDashboard() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [providerName, setProviderName] = useState('Provider');
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [isProvider, setIsProvider] = useState(true);
 
   const loadDashboard = useCallback(
@@ -167,7 +169,7 @@ export default function ProviderDashboard() {
 
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('full_name, role')
+          .select('full_name, role, avatar_url')
           .eq('id', user.id)
           .maybeSingle();
 
@@ -178,6 +180,10 @@ export default function ProviderDashboard() {
             user.user_metadata?.full_name ||
             user.email?.split('@')[0] ||
             'Provider'
+        );
+
+        setAvatarUrl(
+          profile?.avatar_url || user.user_metadata?.avatar_url || null
         );
 
         if (profile?.role !== 'provider') {
@@ -261,6 +267,15 @@ export default function ProviderDashboard() {
 
   useEffect(() => {
     void loadDashboard();
+
+    const handleProfileUpdate = () => {
+      void loadDashboard(true);
+    };
+
+    window.addEventListener('profile-updated', handleProfileUpdate);
+    return () => {
+      window.removeEventListener('profile-updated', handleProfileUpdate);
+    };
   }, [loadDashboard]);
 
   async function updateStatus(
@@ -354,13 +369,22 @@ export default function ProviderDashboard() {
   return (
     <main className="providerDashboard">
       <section className="providerWelcome">
-        <div className="providerWelcomeText">
+        <div className="providerWelcomeIdentity">
+          <div className="providerWelcomeAvatar">
+            {avatarUrl ? (
+              <img src={avatarUrl} alt={`${providerName}'s profile`} />
+            ) : (
+              <UserRound size={30} aria-hidden="true" />
+            )}
+          </div>
+          <div className="providerWelcomeText">
           <span className="providerEyebrow">RESLINK / PROVIDER PORTAL</span>
           <h1>Welcome back, {providerName}</h1>
           <p>
             Manage your accommodation properties, monitor student interest
             and keep track of applications from one place.
           </p>
+          </div>
         </div>
 
         <div className="providerWelcomeActions">

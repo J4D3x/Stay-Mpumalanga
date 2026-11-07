@@ -1,5 +1,6 @@
 
 'use client';
+
 import { SignOutButton } from '@/components/SignOutButton';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -13,6 +14,7 @@ import {
   MapPin,
   RefreshCw,
   XCircle,
+  UserRound,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
@@ -92,6 +94,7 @@ export default function Dashboard() {
 
   const [applications, setApplications] = useState<Application[]>([]);
   const [studentName, setStudentName] = useState('Student');
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
@@ -123,7 +126,7 @@ export default function Dashboard() {
 
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('full_name, role')
+        .select('full_name, role, avatar_url')
         .eq('id', user.id)
         .maybeSingle();
 
@@ -134,6 +137,12 @@ export default function Dashboard() {
           user.user_metadata?.full_name ||
           user.email?.split('@')[0] ||
           'Student'
+      );
+
+      setAvatarUrl(
+        profile?.avatar_url ||
+          user.user_metadata?.avatar_url ||
+          null
       );
 
       if (profile?.role !== 'student') {
@@ -184,6 +193,16 @@ export default function Dashboard() {
 
   useEffect(() => {
     void loadApplications();
+
+    const handleProfileUpdate = () => {
+      void loadApplications(true);
+    };
+
+    window.addEventListener('profile-updated', handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener('profile-updated', handleProfileUpdate);
+    };
   }, []);
 
   const submittedCount = applications.filter(
@@ -205,13 +224,30 @@ export default function Dashboard() {
   return (
     <main className="studentDashboard">
       <section className="dashboardWelcome">
-        <div>
+        <div className="dashboardWelcomeContent">
           <span className="dashboardEyebrow">STUDENT PORTAL</span>
-          <h1>Welcome back, {studentName}</h1>
-          <p>
-            Keep track of your accommodation applications
-            and stay up to date with their progress.
-          </p>
+
+          <div className="dashboardWelcomeIdentity">
+            <div className="dashboardWelcomeAvatar">
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={`${studentName}'s profile picture`}
+                />
+              ) : (
+                <UserRound size={30} />
+              )}
+            </div>
+
+            <div className="dashboardWelcomeText">
+              <h1>Welcome back, {studentName}</h1>
+              <p>
+                Keep track of your accommodation applications
+                and stay up to date with their progress.
+              </p>
+            </div>
+          </div>
+
           <SignOutButton />
         </div>
 
