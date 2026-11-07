@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { MapPin, CheckCircle, ShieldCheck } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { ApplicationForm } from '@/components/ApplicationForm';
+import { ListingGallery } from '@/components/ListingGallery';
 
 export default async function ListingPage({
   params,
@@ -16,7 +17,7 @@ export default async function ListingPage({
   const { data: l, error } = await supabase
     .from('accommodations')
     .select(
-      'id, name, description, location, institution, price, nsfas, room_type, available_rooms, amenities, image_url'
+      'id, name, description, location, institution, price, nsfas, room_type, available_rooms, amenities, image_url, images'
     )
     .eq('id', id)
     .eq('status', 'approved')
@@ -49,9 +50,10 @@ export default async function ListingPage({
   return (
     <main>
       <section className="detailHero">
-        <img
-          src={l.image_url || '/placeholder-accommodation.jpg'}
-          alt={l.name}
+        <ListingGallery
+          name={l.name}
+          imageUrl={l.image_url}
+          images={l.images}
         />
 
         <div>
@@ -63,6 +65,7 @@ export default async function ListingPage({
           </div>
 
           <h1>{l.name}</h1>
+
           <p>
             <MapPin size={17} /> {l.location} ·{' '}
             {l.institution || 'Not specified'}
@@ -76,6 +79,7 @@ export default async function ListingPage({
           <p>{l.description || 'No description provided yet.'}</p>
 
           <h3>Facilities</h3>
+
           <div className="amenities">
             {(l.amenities ?? []).map((a: string) => (
               <span key={a}>
@@ -99,6 +103,7 @@ export default async function ListingPage({
 
         <aside className="applyBox">
           <span>FROM</span>
+
           <strong>
             R{Number(l.price).toLocaleString()}
             <small>/month</small>
@@ -116,23 +121,25 @@ export default async function ListingPage({
               Sign in to apply / enquire
             </Link>
           ) : role === 'student' ? (
-           <a className="button" href="#application">
-            Apply for accommodation
+            <a className="button" href="#application">
+              Apply for accommodation
             </a>
           ) : (
-            <p>Student accounts are required to apply for accommodation.</p>
+            <p>
+              Student accounts are required to apply for accommodation.
+            </p>
           )}
         </aside>
       </section>
 
       {user && role === 'student' && (
-  <section className="enquirySection">
-    <ApplicationForm
-      accommodationId={l.id}
-      accommodationName={l.name}
-    />
-  </section>
-)}
+        <section className="enquirySection" id="application">
+          <ApplicationForm
+            accommodationId={l.id}
+            accommodationName={l.name}
+          />
+        </section>
+      )}
     </main>
   );
 }

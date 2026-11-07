@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { Listing } from '@/types';
 
+
 export function ListingCard({ l }: { l: Listing }) {
   return (
-    <article className="card">
+    <article className="card" >
       <img src={l.imageUrl} alt={l.name} />
 
       <div className="cardBody">

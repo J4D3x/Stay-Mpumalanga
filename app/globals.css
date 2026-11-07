@@ -206,6 +206,9 @@ nav {
 .cardBody {
   padding: 20px;
 }
+.card:hover{
+ background-color: #f1f1f1;
+}
 
 .card h3 {
   margin: 10px 0 5px;
@@ -3194,5 +3197,307 @@ footer strong {
   }
 }
 
+
+/* ========================================
+   RESLINK LISTING PHOTO GALLERY
+======================================== */
+
+.listingGallery {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 24px;
+}
+
+.galleryMain {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 240px;
+  max-height: 520px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #e9ece8;
+}
+
+.galleryMain > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+/* Navigation arrows */
+
+.galleryArrow {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,.94);
+  color: #152018;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(0,0,0,.15);
+}
+
+.galleryArrow:hover {
+  background: white;
+}
+
+.galleryPrevious {
+  left: 14px;
+}
+
+.galleryNext {
+  right: 14px;
+}
+
+/* Image counter and expand button */
+
+.galleryExpand {
+  position: absolute;
+  z-index: 3;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 13px;
+  border: none;
+  border-radius: 9px;
+  background: rgba(255,255,255,.95);
+  color: #152018;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.galleryCounter {
+  position: absolute;
+  z-index: 3;
+  left: 14px;
+  bottom: 14px;
+  padding: 8px 11px;
+  border-radius: 8px;
+  background: rgba(0,0,0,.65);
+  color: white;
+  font-size: 12px;
+}
+
+/* Thumbnail strip */
+
+.galleryThumbnails {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.galleryThumbnail {
+  flex: 0 0 110px;
+  width: 110px;
+  height: 76px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #eee;
+  cursor: pointer;
+  opacity: .7;
+}
+
+.galleryThumbnail.active {
+  border-color: var(--accent, #1e6b4a);
+  opacity: 1;
+}
+
+.galleryThumbnail img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========================================
+   FULLSCREEN GALLERY
+======================================== */
+
+.galleryLightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 65px 75px;
+  background: rgba(0,0,0,.96);
+}
+
+.galleryLightbox > img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.galleryClose {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,.16);
+  color: white;
+  cursor: pointer;
+}
+
+.lightboxPrevious {
+  left: 18px;
+}
+
+.lightboxNext {
+  right: 18px;
+}
+
+.lightboxCounter {
+  position: absolute;
+  bottom: 18px;
+  color: white;
+  font-size: 14px;
+}
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 900px) {
+  .galleryMain {
+    aspect-ratio: 16 / 10;
+    max-height: 430px;
+  }
+
+  .galleryThumbnail {
+    flex-basis: 95px;
+    width: 95px;
+    height: 68px;
+  }
+}
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 600px) {
+  .listingGallery {
+    margin-bottom: 18px;
+  }
+
+  .galleryMain {
+    aspect-ratio: 4 / 3;
+    min-height: 0;
+    max-height: none;
+    border-radius: 13px;
+  }
+
+  .galleryArrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .galleryArrow svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .galleryPrevious {
+    left: 9px;
+  }
+
+  .galleryNext {
+    right: 9px;
+  }
+
+  .galleryExpand {
+    right: 9px;
+    bottom: 9px;
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .galleryCounter {
+    left: 9px;
+    bottom: 9px;
+    padding: 7px 9px;
+    font-size: 11px;
+  }
+
+  .galleryThumbnails {
+    gap: 8px;
+    margin-top: 9px;
+    padding-bottom: 5px;
+  }
+
+  .galleryThumbnail {
+    flex: 0 0 78px;
+    width: 78px;
+    height: 60px;
+    border-radius: 8px;
+  }
+
+  .galleryLightbox {
+    padding: 55px 8px;
+  }
+
+  .galleryClose {
+    top: 10px;
+    right: 10px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .lightboxPrevious {
+    left: 7px;
+  }
+
+  .lightboxNext {
+    right: 7px;
+  }
+}
+
+/* VERY SMALL PHONES */
+
+@media (max-width: 360px) {
+  .galleryMain {
+    aspect-ratio: 1 / 1;
+  }
+
+  .galleryArrow {
+    width: 32px;
+    height: 32px;
+  }
+
+  .galleryThumbnail {
+    flex-basis: 68px;
+    width: 68px;
+    height: 54px;
+  }
+}
 
 
