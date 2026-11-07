@@ -54,23 +54,34 @@ export default function Login() {
                 return;
             }
 
+            // ADMIN ACCOUNT
+            if (profile?.role === 'admin') {
+                router.replace('/admin/dashboard');
+                router.refresh();
+                return;
+            }
+
+            // PROVIDER ACCOUNT
             if (profile?.role === 'provider') {
                 router.replace('/provider/dashboard');
                 router.refresh();
                 return;
             }
 
+            // STUDENT ACCOUNT
             if (profile?.role === 'student') {
                 router.replace('/dashboard');
                 router.refresh();
                 return;
             }
 
+            // UNKNOWN OR MISSING ACCOUNT TYPE
             setError(
                 'Your account type has not been configured correctly. Please contact support.'
             );
 
             await supabase.auth.signOut();
+
         } catch {
             setError('Something went wrong. Please try again.');
         } finally {
