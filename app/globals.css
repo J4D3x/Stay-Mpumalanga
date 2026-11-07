@@ -5039,3 +5039,36 @@ footer strong {
   }
 }
 
+.applicationStatus {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 15px;
+  margin-top: 15px;
+  border: 1px solid #dce9df;
+  border-radius: 10px;
+  background: #f0f7f1;
+  color: #1e6b4a;
+}
+
+.applicationStatus > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.applicationStatus div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.applicationStatus strong {
+  font-size: 13px;
+}
+
+.applicationStatus span {
+  color: #52675a;
+  font-size: 13px;
+  text-transform: capitalize;
+}
