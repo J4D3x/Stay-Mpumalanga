@@ -1,7 +1,7 @@
-
+'use'
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { MapPin, CheckCircle, ShieldCheck } from 'lucide-react';
+import { MapPin, CheckCircle, ShieldCheck, Clock } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { ApplicationForm } from '@/components/ApplicationForm';
 import { ListingGallery } from '@/components/ListingGallery';
@@ -36,6 +36,7 @@ export default async function ListingPage({
   } = await supabase.auth.getUser();
 
   let role: string | null = null;
+  let applicationStatus: string | null = null;
 
   if (user) {
     const { data: profile } = await supabase
@@ -45,7 +46,29 @@ export default async function ListingPage({
       .maybeSingle();
 
     role = profile?.role ?? null;
+
+    // Check whether this student has already applied
+    if (role === 'student') {
+      const { data: application, error: applicationError } =
+        await supabase
+          .from('applications')
+          .select('status')
+          .eq('accommodation_id', l.id)
+          .eq('student_id', user.id)
+          .maybeSingle();
+
+      if (applicationError) {
+        throw new Error('Unable to check your application status.');
+      }
+
+      applicationStatus = application?.status ?? null;
+    }
   }
+
+  const formattedStatus = applicationStatus
+    ? applicationStatus.charAt(0).toUpperCase() +
+      applicationStatus.slice(1)
+    : null;
 
   return (
     <main>
@@ -121,9 +144,19 @@ export default async function ListingPage({
               Sign in to apply / enquire
             </Link>
           ) : role === 'student' ? (
-            <a className="button" href="#application">
-              Apply for accommodation
-            </a>
+            applicationStatus ? (
+              <div className="applicationStatus">
+                <Clock size={19} />
+                <div>
+                  <strong>Application status:</strong>
+                  <span>{formattedStatus}</span>
+                </div>
+              </div>
+            ) : (
+              <a className="button" href="#application">
+                Apply for accommodation
+              </a>
+            )
           ) : (
             <p>
               Student accounts are required to apply for accommodation.
@@ -132,7 +165,7 @@ export default async function ListingPage({
         </aside>
       </section>
 
-      {user && role === 'student' && (
+      {user && role === 'student' && !applicationStatus && (
         <section className="enquirySection" id="application">
           <ApplicationForm
             accommodationId={l.id}
